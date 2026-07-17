@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وزارة التربية - نتائج الطلاب المهني 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* --- واجهة الإدخال الرئيسية --- */
+        .logo-container {
+            margin-bottom: 25px;
+        }
+
+        .logo-img {
+            width: 170px;
+            height: 170px;
+            object-fit: contain;
+        }
+
+        .title-section h1 { color: #1a5276; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .title-section h2 { color: #1f618d; font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .title-section h3 { color: #2471a3; font-size: 22px; font-weight: 700; margin-bottom: 25px; }
+
+        .instruction-text { color: #7f8c8d; font-size: 16px; margin-bottom: 20px; }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        /* رسالة الخطأ المتطابقة مع الصورة */
+        .error-container {
+            display: none;
+            text-align: left; /* نصوص الخطأ الأجنبية تبدأ من اليسار */
+            direction: ltr;  /* لتنسيق الكلام الإنجليزي بشكل صحيح */
+            font-family: 'Courier New', Courier, monospace; /* خط يشبه خطأ النظام */
+            color: #000000;
+            font-size: 18px;
+            line-height: 1.4;
+            margin-top: 25px;
+            padding: 10px;
+        }
+
+        /* --- واجهة عرض النتيجة --- */
+        .result-page, .error-page-wrapper {
+            display: none;
+            text-align: right;
+            width: 100%;
+        }
+
+        .back-bar {
+            background-color: #1a5276;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .student-info {
+            color: #c0392b;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+
+        /* جدول الدرجات */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        .results-table th, .results-table td {
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .results-table th {
+            background-color: #eaeded;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .results-table td:first-child {
+            text-align: center;
+            width: 30%;
+        }
+
+        /* الخلاصة الإجمالية (تم تعديلها لتصبح جهة اليمين) */
+        .summary-section {
+            text-align: right; /* تحويل المحاذاة إلى اليمين */
+            padding-right: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #27ae60;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- صفحة الإدخال الرئيسية -->
+        <div id="loginPage">
+            <div class="logo-container">
+                <img src="https://thankful-sea-0c283ca10.7.azurestaticapps.net/X1.jpg" alt="شعار وزارة التربية" class="logo-img">
+            </div>
+
+            <div class="title-section">
+                <h1>وزارة التربية</h1>
+                <h2>المديرية العامة للتعليم المهني</h2>
+                <h3>نتائج الطلاب المهني 2026</h3>
+            </div>
+
+            <p class="instruction-text">أدخل رقم الطالب السري لمعرفة النتيجة</p>
+
+            <form onsubmit="checkResult(event)">
+                <input type="text" id="secretCode" class="input-field" placeholder="مثال: 1011112121" required>
+                <button type="submit" class="btn">عرض النتيجة</button>
+                <button type="button" class="btn" style="background-color: #007bff;">تحميل النتيجة</button>
+            </form>
+        </div>
+
+        <!-- واجهة الخطأ مع شريط الرجوع كما في الصورة -->
+        <div id="errorPageWrapper" class="error-page-wrapper">
+            <div class="back-bar" onclick="goBack()">رجوع</div>
+            <div class="error-container" id="errorText">
+                BlobNotFoundThe specified blob does not exist.<br>
+                RequestId:a2554c3c-f01e-0049-09bc-1352f8000000<br>
+                Time:2026-07-14T18:14:54.7100948Z
+            </div>
+        </div>
+
+        <!-- صفحة عرض النتيجة -->
+        <div id="resultPage" class="result-page">
+            <div class="back-bar" onclick="goBack()">رجوع</div>
+            
+            <div class="result-header">
+                <p>وزارة التربية</p>
+                <p>المديرية العامة للتعليم المهني</p>
+                <p>نتيجة الدور الاول 2025 - 2026</p>
+            </div>
+
+            <div class="student-info">
+                <p>الرقم الامتحاني: 1426611500091</p>
+                <p>اسم الطالب: علي خالد محمد موسى</p>
+                <p>المدرسة: اعدادية بغداد المهنية</p>
+                <p>القسم: الإدارة</p>
+                <p>المحافظة: بغداد - الرصافة الثانية</p>
+            </div>
+
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>الدرجة</th>
+                        <th>المادة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>85</td><td>التربية الاسلامية</td></tr>
+                    <tr><td>82</td><td>اللغة العربية</td></tr>
+                    <tr><td>80</td><td>اللغة الانكليزية والمراسلات التجارية</td></tr>
+                    <tr><td>82</td><td>المحاسبة الادارية</td></tr>
+                    <tr><td>84</td><td>الادارة المالية</td></tr>
+                    <tr><td>85</td><td>ادارة الموارد البشرية</td></tr>
+                    <tr><td>78</td><td>ادارة الانتاج والعمليات</td></tr>
+                    <tr><td>78</td><td>مبادئ الاقتصاد الكلي</td></tr>
+                </tbody>
+            </table>
+
+            <div class="summary-section">
+                <p>المجموع : 654</p>
+                <p>المعدل : 81.75</p>
+                <p>النتيجة : ناجح</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function checkResult(event) {
+            event.preventDefault(); 
+            
+            var codeInput = document.getElementById('secretCode').value.trim();
+            var loginPage = document.getElementById('loginPage');
+            var resultPage = document.getElementById('resultPage');
+            var errorPageWrapper = document.getElementById('errorPageWrapper');
+            var errorText = document.getElementById('errorText');
+
+            if (codeInput === "7576513782") {
+                // تفعيل صفحة النتيجة الصحيحة
+                loginPage.style.display = 'none';
+                resultPage.style.display = 'block';
+                errorPageWrapper.style.display = 'none';
+            } else {
+                // تفعيل صفحة الخطأ مع شريط الرجوع
+                loginPage.style.display = 'none';
+                resultPage.style.display = 'none';
+                errorPageWrapper.style.display = 'block';
+                errorText.style.display = 'block';
+            }
+        }
+
+        function goBack() {
+            // العودة للصفحة الرئيسية وتصفير البيانات
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('errorPageWrapper').style.display = 'none';
+            document.getElementById('secretCode').value = '';
+        }
+    </script>
+
+</body>
+</html>
